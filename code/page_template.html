@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ford or Bridge?</title>
+<meta name="description" content="Which British place-name is richer today, the fords or the bridges? {{counts.GB.ford|int}} ford names and {{counts.GB.bridge|int}} bridge names set against the 2021 census and ONS small-area income.">
+<meta property="og:title" content="Ford or Bridge?">
+<meta property="og:description" content="Ford towns hold {{ford_bridge_pop_ratio|f1}} times as many people as bridge towns. Per household, the typical ford town is richer too.">
+<meta property="og:image" content="https://tristan-hotham.github.io/fords-and-bridges/header.png">
+<meta property="og:url" content="https://tristan-hotham.github.io/fords-and-bridges/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* River-light. Ford = gravel ochre (shallow water you wade). Bridge = deep river blue. Other places = grey. */
+:root{
+  --bg:#EDF1F3; --panel:#E1E8EC; --fg:#16212A; --muted:#5D6B76; --rule:#CDD7DD; --card:#F8FAFB; --border:#B9C6CE;
+  --ford:#B8621B; --bridge:#2B5F8E; --other:#8E9AA3; --hot:#B8621B; --water:#7FA6BF; --pale:#C9DCE7;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10171D; --panel:#172129; --fg:#E6EDF1; --muted:#9AAAB5; --rule:#26323B; --card:#18232B; --border:#33424D;
+  --ford:#E8934A; --bridge:#6FA6DA; --other:#6E7B85; --hot:#E8934A; --water:#5D88A3; --pale:#22404F; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10171D; --panel:#172129; --fg:#E6EDF1; --muted:#9AAAB5; --rule:#26323B; --card:#18232B; --border:#33424D;
+  --ford:#E8934A; --bridge:#6FA6DA; --other:#6E7B85; --hot:#E8934A; --water:#5D88A3; --pale:#22404F; color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 18px/1.62 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+.wrap{max-width:680px;margin:0 auto;padding-block:28px 64px}
+.wrap .bleed{width:min(1080px,calc(100vw - 32px));margin-left:calc((100% - min(1080px,100vw - 32px))/2);margin-right:0}
+a{color:inherit;text-decoration-color:var(--bridge);text-underline-offset:3px}
+.kicker{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.kicker b{background:var(--bridge);color:#fff;padding:5px 8px;font-weight:500}
+header.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 24px;align-items:end;border-bottom:6px double var(--fg);padding-bottom:22px;margin-top:18px}
+h1{font:900 clamp(50px,12.5vw,108px)/.88 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance;font-variation-settings:"SOFT" 50}
+h1 .f{color:var(--ford)} h1 .b{color:var(--bridge)}
+.mark{width:clamp(90px,20vw,170px);height:auto;display:block}
+.dek{grid-column:1/-1;font-size:21px;line-height:1.42;margin:8px 0 0;max-width:46ch}
+.byline{font:400 13px/1.4 var(--mono);color:var(--muted);margin-top:14px}
+h2{font:800 34px/1.04 var(--display);letter-spacing:-.01em;margin:52px 0 10px;text-wrap:balance}
+h2 .n{font:500 13px/1 var(--mono);color:var(--bridge);display:block;letter-spacing:.1em;margin-bottom:10px}
+h3{font:600 20px/1.25 var(--display);margin:28px 0 6px}
+p{margin:0 0 16px}
+.lede::first-letter{font:900 72px/.8 var(--display);float:left;margin:6px 10px 0 0;color:var(--bridge)}
+.fd{color:var(--ford);font-weight:600}.bd{color:var(--bridge);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:26px 0 8px}
+.stats div{background:var(--card);padding:14px 12px}
+.stats b{display:block;font:900 clamp(26px,5.6vw,38px)/1 var(--display);color:var(--fg)}
+.stats b.f{color:var(--ford)} .stats b.b{color:var(--bridge)}
+.stats span{font:400 12px/1.35 var(--mono);color:var(--muted);display:block;margin-top:6px}
+@media (max-width:600px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.figure{margin:26px 0 30px}
+.fig-h{font:600 19px/1.25 var(--display);margin:0 0 4px}
+.fig-sub{font:400 13px/1.45 var(--mono);color:var(--muted);margin:0 0 12px}
+.src{font:400 12px/1.45 var(--mono);color:var(--muted);margin-top:10px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--mono);fill:var(--fg)}
+.lab{font-size:12px}.lab.m{fill:var(--muted)}.lab.b{font-weight:500}.lab.s{font-size:11px}.lab.big{font:600 15px var(--display)}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font:400 12px/1.45 var(--mono);padding:8px 10px;border-radius:3px;max-width:270px;z-index:1000;transform:translate(-50%,calc(-100% - 12px));display:none}
+.tip b{font-weight:500}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px}
+.btn{font:500 12px/1 var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:8px 10px;cursor:pointer;min-height:36px}
+.btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn:focus-visible,input:focus-visible{outline:2px solid var(--bridge);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;max-width:100%;flex-wrap:wrap}
+.seg .btn{border:0;border-radius:0;border-right:1px solid var(--border)}
+.seg .btn:last-child{border-right:0}
+.searchbox{position:relative;flex:1 1 200px;min-width:0}
+input[type=search]{font:400 14px/1 var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:9px 10px;min-height:36px;width:100%}
+.suggest{position:absolute;left:0;right:0;top:100%;margin:2px 0 0;padding:0;list-style:none;background:var(--card);border:1px solid var(--border);z-index:1001;font:400 13px/1.3 var(--mono);display:none;max-height:300px;overflow:auto}
+.suggest li{padding:8px 10px;cursor:pointer;border-bottom:1px solid var(--rule)}
+.suggest li span{color:var(--muted)}
+.suggest li[aria-selected="true"],.suggest li:hover{background:var(--panel)}
+#lmap{height:640px;border:1px solid var(--border);background:var(--panel);border-radius:2px}
+@media (max-width:600px){#lmap{height:500px}}
+.leaflet-container{font:400 12px/1.4 var(--mono);background:var(--panel)}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--card);color:var(--fg);border-radius:3px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.leaflet-popup-content{margin:12px 14px;font:400 12.5px/1.45 var(--mono);min-width:220px}
+.leaflet-container a.leaflet-popup-close-button{color:var(--muted)}
+.leaflet-bar a,.leaflet-bar a:hover{background:var(--card);color:var(--fg);border-bottom-color:var(--border)}
+.leaflet-control-attribution{background:color-mix(in srgb,var(--card) 85%,transparent)!important;color:var(--muted)}
+.leaflet-control-attribution a{color:var(--fg)}
+.pop b.t{font:600 17px/1.2 var(--display);display:block;margin-bottom:2px}
+.pop .c{color:var(--muted);margin-bottom:6px}
+.pop dl{display:grid;grid-template-columns:auto 1fr;gap:1px 10px;margin:4px 0 6px}
+.pop dt{color:var(--muted)}.pop dd{margin:0}
+.pop .tag{display:inline-block;font-weight:500;color:#fff;padding:2px 6px;border-radius:2px;margin-bottom:6px}
+.pop .note{font-size:11.5px;color:var(--muted);margin:4px 0}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font:400 12px/1.3 var(--mono);color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid var(--bg)}
+.pull{font:600 26px/1.25 var(--display);border-left:6px solid var(--bridge);padding:4px 0 4px 18px;margin:30px 0}
+.note{background:var(--panel);border:1px solid var(--rule);padding:14px 16px;font-size:16px;margin:22px 0}
+.note h3{margin-top:0}
+table.t{width:100%;border-collapse:collapse;font:400 13px/1.35 var(--mono)}
+table.t th{text-align:left;font-weight:500;color:var(--muted);border-bottom:2px solid var(--fg);padding:6px 8px 6px 0}
+table.t td{border-bottom:1px solid var(--rule);padding:7px 8px 7px 0;vertical-align:top}
+table.t td.num,table.t th.num{text-align:right;white-space:nowrap}
+table.t td small{color:var(--muted);display:block}
+.tablewrap{overflow-x:auto}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:640px){.two{grid-template-columns:1fr}}
+.two h3{margin-top:0}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+@media (max-width:600px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--ford);padding:12px 14px;font:400 13px/1.5 var(--mono)}
+.card.b{border-left-color:var(--bridge)}
+.card b{font:600 19px/1.2 var(--display);display:block;margin-bottom:2px}
+.card .big{font:900 30px/1.05 var(--display);margin:6px 0 2px}
+.card .big span{color:var(--muted);font:400 13px/1.3 var(--mono);display:block;margin-top:4px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.cta a{font:500 13px/1 var(--mono);text-decoration:none;border:1px solid var(--fg);padding:11px 14px;border-radius:3px}
+.cta a.p{background:var(--bridge);border-color:var(--bridge);color:#fff}
+footer{border-top:6px double var(--fg);margin-top:56px;padding-top:16px;font:400 13px/1.55 var(--mono);color:var(--muted)}
+footer p{margin:0 0 10px}
+.theme{position:fixed;right:12px;bottom:12px;z-index:1002}
+@media print{.theme,.controls{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="kicker"><b>Data study</b><span>History × data</span><span>Great Britain, 1086 and 2021</span></div>
+<header class="hero">
+  <h1><span class="f">Ford</span> or <span class="b">bridge</span>?</h1>
+  <svg class="mark" viewBox="-100 -100 200 200" aria-hidden="true"><g id="heroMark"></g></svg>
+  <p class="dek">Britain is full of places named after the spot where people crossed a river: Oxford, Bradford and Stratford waded it; Cambridge, Tonbridge and Pontypridd built over it. Which kind of place is richer today, in total and per household? And did having a bridge help a place grow?</p>
+</header>
+<div class="byline">Dr Tristan Hotham, Independent researcher · October 2026 · Data: OS Open Names, ONS Census 2021, ONS small-area income FYE2023, Domesday, Wikidata</div>
+
+<div class="stats">
+  <div><b class="f">{{counts.GB.ford|int}}</b><span>ford places in Great Britain, against {{counts.GB.bridge|int}} bridge places</span></div>
+  <div><b class="f">{{ford_bridge_pop_ratio|f1}}×</b><span>as many people live in ford towns as in bridge towns</span></div>
+  <div><b class="b">{{premium.both.bridge|apct1}}</b><span>lower household income in bridge places, like for like</span></div>
+  <div><b class="f">{{domesday.ford.share_tv|pct}}</b><span>of ford towns and villages are in Domesday Book; bridges {{domesday.bridge.share_tv|pct}}</span></div>
+</div>
+
+<p class="lede">Before there were bridges there were fords. A ford is a shallow place where people, carts and cattle could wade across, and Old English named hundreds of settlements after them. A bridge needed money, timber or stone, and someone to keep it up. So I wondered: if a place was named for its bridge, did that bridge make it?</p>
+<p>I took every populated place on the Ordnance Survey's open gazetteer, {{places_gb|int}} of them, and sorted their names into fords (Oxford, Garforth, Welsh <em>rhyd</em>), bridges (Tonbridge, Bridge of Allan, Welsh <em>pont</em>) and everything else. Then I set them against the 2021 census and the Office for National Statistics' newest estimates of household income for small areas.</p>
+<p>The short answer surprised me. Fords win in total, by a lot, and the typical ford place is a little richer per household too. The bridge places are younger names, mostly missing from Domesday Book, and having a bridge in the name does not seem to have made a place bigger.</p>
+
+<h2><span class="n">01 · The map</span>Every ford and every bridge</h2>
+<p>Each dot is a place whose name says ford or bridge. <span class="fd">Ochre</span> for fords, <span class="bd">blue</span> for bridges. Dots are sized by the population of the place's own built-up area in 2021, where it has one; small hamlets and villages get the smallest dot. Tap a dot for its income, its Domesday record and the rule that classified it.</p>
+<div class="figure bleed">
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Show">
+      <button class="btn" data-show="all" aria-pressed="true">Both</button>
+      <button class="btn" data-show="0" aria-pressed="false">Fords</button>
+      <button class="btn" data-show="1" aria-pressed="false">Bridges</button>
+    </div>
+    <div class="seg" role="group" aria-label="Colour by">
+      <button class="btn" data-col="type" aria-pressed="true">Colour by type</button>
+      <button class="btn" data-col="inc" aria-pressed="false">Colour by income</button>
+    </div>
+    <div class="searchbox">
+      <input type="search" id="q" placeholder="Find a place, e.g. Stamford" aria-label="Find a ford or bridge place" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug">
+      <ul class="suggest" id="sug" role="listbox"></ul>
+    </div>
+  </div>
+  <div id="lmap" role="region" aria-label="Map of {{counts.GB.ford|int}} ford places and {{counts.GB.bridge|int}} bridge places in Great Britain"></div>
+  <div class="legend" id="legend"></div>
+  <div class="src">Places from OS Open Names (cities, towns, villages, hamlets, suburbs and other settlements). Income is the ONS mean total household income, financial year ending 2023, for England and Wales only; Scotland has no matching small-area series, so Scottish dots carry no income. Click the map to let the scroll wheel zoom it.</div>
+</div>
+<p>Two patterns jump out. England is ford country: it has {{counts.England.ford|int}} ford places and {{counts.England.bridge|int}} bridge places. In Wales and Scotland it is the other way round, with {{counts.Wales.bridge|int}} bridges to {{counts.Wales.ford|int}} fords in Wales (most of them Welsh <em>pont</em> names) and {{counts.Scotland.bridge|int}} to {{counts.Scotland.ford|int}} in Scotland, where {{bridge_of|int}} places have names of the "Bridge of" kind. And the bridges sit right on the water: half of all bridge places are within {{roman_rivers.bridge.river_median_km|m}} of a named river on the OS river map, against {{roman_rivers.ford.river_median_km|m}} for fords and {{roman_rivers.other.river_median_km|m}} for everywhere else. That is a good sign the names mean what they say.</p>
+
+<h2><span class="n">02 · In total</span>The fords win by a mile</h2>
+<p>To count people I need a settlement with edges. The ONS draws "built-up areas" around every town and village, and I matched each place name to the built-up area of the same name nearby, then summed its 2021 census population. In England and Wales {{totals.ford.n|int}} ford places and {{totals.bridge.n|int}} bridge places have a built-up area with a population of their own.</p>
+<div class="figure">
+  <div class="fig-h">Who holds the people and the money</div>
+  <div class="fig-sub">Residents of ford and bridge built-up areas in England and Wales, 2021, and their share of all household income (residents weighted by their area's mean household income).</div>
+  <div class="chart" id="totals"></div>
+  <div class="src">London is left out: its built-up area is split by borough, so Brentford, Deptford, Ilford, Romford, Stratford and Uxbridge have no population of their own, and the borough of Redbridge (a 1965 name) is not a settlement.</div>
+</div>
+<p>Ford towns hold {{totals.ford.pop|int}} people, {{totals.ford.pop_share|pct1}} of everyone in England and Wales. Bridge towns hold {{totals.bridge.pop|int}}, or {{totals.bridge.pop_share|pct1}}. That is {{ford_bridge_pop_ratio|f1}} times as many people, and {{ford_bridge_income_ratio|f1}} times as much household income. Part of that is just numbers: there are {{ford_bridge_n_ratio|f1}} ford towns for every bridge town. But the fords also have the giants.</p>
+<div class="two">
+  <div><h3 class="fd">Biggest fords</h3><div class="tablewrap"><table class="t" id="topF"></table></div></div>
+  <div><h3 class="bd">Biggest bridges</h3><div class="tablewrap"><table class="t" id="topB"></table></div></div>
+</div>
+<p>Bradford alone, with {{ex.Bradford.pop|int}} people, outnumbers the top {{bradford_beats_top_k_bridges|words}} bridge towns put together ({{bradford_vs_top_k_sum|int}}). Ford country also includes Oxford, Watford, Chelmsford, Salford, Bedford, Guildford and Stafford. On the bridge side, Cambridge ({{ex.Cambridge.pop|int}}) towers over the rest; the next biggest, Stourbridge, has {{ex.Stourbridge.pop|int}}.</p>
+
+<h2><span class="n">03 · Per household</span>A narrow ford lead</h2>
+<p>Total size is one question. Wealth per head is another. The ONS small-area income estimates give the mean total income of households in each neighbourhood (an MSOA; the median one has {{msoa_pop_median|int}} residents). For a town I take the population-weighted average of its neighbourhoods. The ONS does not publish income per person at this scale, so household income is the closest measure.</p>
+<div class="cards">
+  <div class="card"><b>Typical ford town</b><div class="big">£{{totals.ford.inc_median|int}} <span>median household income</span></div><div>Middle half: £{{totals.ford.inc_q25|int}} to £{{totals.ford.inc_q75|int}}</div></div>
+  <div class="card b"><b>Typical bridge town</b><div class="big">£{{totals.bridge.inc_median|int}} <span>median household income</span></div><div>Middle half: £{{totals.bridge.inc_q25|int}} to £{{totals.bridge.inc_q75|int}}</div></div>
+</div>
+<p>The typical ford town is £{{bridge_minus_ford_median_bua|absint}} a year richer per household than the typical bridge town. Weight each town by its population, so that every resident counts once, and the race is a dead heat: £{{totals.ford.inc_popweighted|int}} for fords and £{{totals.bridge.inc_popweighted|int}} for bridges. That tie is Cambridge's doing. Leave Cambridge out and the bridge figure falls to £{{bridge_popweighted_without_cambridge|int}}; leave Bradford out of the fords and theirs rises to £{{ford_popweighted_without_bradford|int}}.</p>
+<p>Built-up areas leave out most hamlets and small villages, so I also looked at all {{place_unit_n.ford|int}} ford places and {{place_unit_n.bridge|int}} bridge places in England and Wales, each given the income of its own town or of the nearest neighbourhood. The picture is the same. The median ford place has households on £{{place_median_inc.ford|int}}; the median bridge place £{{place_median_inc.bridge|int}}; the median of everywhere else £{{place_median_inc.other|int}}.</p>
+<div class="figure">
+  <div class="fig-h">How household income is spread</div>
+  <div class="fig-sub">Share of places in each £5,000 band of mean household income, all named places in England and Wales.</div>
+  <div class="chart" id="hist"></div>
+  <div class="src">N = {{place_unit_n.ford|int}} fords, {{place_unit_n.bridge|int}} bridges, {{place_unit_n.other|int}} other places. A hamlet takes the income of the surrounding neighbourhood, not of its own few houses.</div>
+</div>
+
+<h2><span class="n">04 · Like with like</span>Same size, same story</h2>
+<p>Big towns and small villages differ in income, so a fair test compares places of the same size. Within every size band but the very largest, ford places come out ahead of bridge places.</p>
+<div class="figure">
+  <div class="fig-h">Median household income by size of place</div>
+  <div class="fig-sub">Size = 2021 population of the place's own built-up area. "No figure" covers hamlets and small villages too small to have one.</div>
+  <div class="chart" id="sizebars"></div>
+  <div class="src">The top band has only {{size_matched.4.ford.n|int}} ford towns and {{size_matched.4.bridge.n|int}} bridge towns (Cambridge and Stourbridge), so it tells us little.</div>
+</div>
+
+<h2><span class="n">05 · The south-east effect</span>Where the fords are</h2>
+<p>Much of England's wealth sits in London, the South East and the East of England. If fords crowd into the south-east and bridges into the north and Wales, the gap could be geography rather than anything about the names. And partly it is: {{share_south_east.ford|pct}} of ford places are in those three regions, against {{share_south_east.bridge|pct}} of bridge places. Wales alone holds {{region_share.bridge.Wales|pct}} of the bridge places in England and Wales, and its incomes are among the lowest of any region.</p>
+<div class="figure">
+  <div class="fig-h">Ford against bridge, region by region</div>
+  <div class="fig-sub">Median household income of ford places (ochre) and bridge places (blue) in each region. Grey tick: all other places. Numbers: how many places.</div>
+  <div class="chart" id="regions"></div>
+</div>
+<p>Within regions the fords still lead in {{regions_ford_ahead|int}} of 10, though in two of them only by a whisker. The bridge places come out ahead only in London (with just {{regions.0.bridge.n|int}} of them) and the North East. In the West Midlands and Wales the two are level, within 1%.</p>
+
+<h2><span class="n">06 · The bridge premium</span>It is a ford premium</h2>
+<p>Putting it all together, I fitted a simple model of household income (on a log scale) for every named place, with the name type, the region and the size band. The number that matters is the gap between bridge places and ford places once those are held equal. I call it the bridge premium. It is negative.</p>
+<div class="figure">
+  <div class="fig-h">The bridge premium, under different controls</div>
+  <div class="fig-sub">Household income in bridge places compared with ford places, in per cent. Bars: 95% confidence intervals. Left of zero: fords richer.</div>
+  <div class="chart" id="premium"></div>
+  <div class="src">Ordinary least squares on log income with robust standard errors; N = {{premium.both.n|int}} places in England and Wales. The last row uses a different income measure (net, equivalised, after housing costs) and only places with a built-up area of their own (N = {{robust.net_ahc_bua.n|int}}).</div>
+</div>
+<p>Raw, bridge places have household incomes {{premium.raw.bridge|apct1}} lower than ford places. Holding size equal changes almost nothing. Holding region equal shrinks the gap to {{premium.region.bridge|apct1}}, so more than half of the raw gap is the south-east effect. With both, it is {{premium.both.bridge|apct1}} (95% interval {{premium.both.hi|apct1}} to {{premium.both.lo|apct1}}). It survives dropping the names I am unsure of, dropping two-word names such as "Hebden Bridge" or "Ford End", and keeping England only.</p>
+<p>One measure tells a different story. On income after tax and housing costs, adjusted for household size, bridge towns are {{robust.net_ahc_bua.bridge|pct1}} ahead of ford towns, with an interval that comfortably includes zero. Some of the ford lead is gross income that goes on housing.</p>
+<p class="pull">Fords outnumber bridges, hold more people and, like for like, slightly richer households. If there is a premium in a crossing name, it belongs to the ford.</p>
+
+<h2><span class="n">07 · Did a bridge help?</span>Younger names, not bigger places</h2>
+<p>The second question is the harder one. A bridge name tells us there was a bridge when the name was coined. Did that bridge help the place grow? I tried three ways of looking, and none of them can prove cause and effect.</p>
+<h3>1. Fords are older names</h3>
+<p>I looked up every English place in Domesday Book, the survey of 1086. Of the {{domesday.ford.n_tv|int}} ford-named towns and villages in England, {{domesday.ford.share_tv|pct}} are there. Of the {{domesday.bridge.n_tv|int}} bridge-named ones, only {{domesday.bridge.share_tv|pct}}. The average for all other towns and villages is {{domesday.other.share_tv|pct}}.</p>
+<div class="figure">
+  <div class="fig-h">Share of towns and villages recorded in Domesday Book, 1086</div>
+  <div class="fig-sub">English places of type town, city or village, by name type.</div>
+  <div class="chart" id="dd"></div>
+  <div class="src">Matched by name within 3 km of the Domesday place's grid square. A place renamed since 1086 will not match, so these shares are lower bounds.</div>
+</div>
+<p>Domesday households point the same way. Ford places recorded in 1086 had a median of {{domesday.ford.hh_median|int}} households; bridge places {{domesday.bridge.hh_median|int}}. And {{domesday.ford.burgess_places|int}} ford places had burgesses, the townsmen of a borough, including Hereford, Hertford, Stafford, Thetford and Bradford on Avon. Of the bridge places, only Cambridge did. Most bridge names are later: many surely replaced older names once a bridge was built, and the old name is lost to this kind of matching.</p>
+<h3>2. Bridge names did not make places bigger</h3>
+<p>Among towns and villages with a built-up area of their own, bridge places are no bigger than ford places once region is held equal: the estimate is {{size_models.bua.bridge|pct}} larger, with an interval from {{size_models.bua.lo|apct}} smaller to {{size_models.bua.hi|pct}} larger. That is no evidence either way. A similar share of each has a built-up area at all ({{has_bua_share.ford|pct1}} of ford places, {{has_bua_share.bridge|pct1}} of bridge places). For the {{domesday_size_model.n|int}} English towns and villages recorded in Domesday, a bridge name adds an estimated {{domesday_size_model.bridge|pct}} to size today once 1086 households and region are allowed for, but the evidence is weak (p = {{domesday_size_model.bridge_p|f2}}) and rests on a handful of towns: {{domesday_bridge_towns.0}}, {{domesday_bridge_towns.1}}, {{domesday_bridge_towns.2}}, {{domesday_bridge_towns.3}} and a few more.</p>
+<h3>3. Dated medieval bridges are too few to test</h3>
+<p>I hoped to ask the direct question: does a place with a medieval bridge do better? Wikidata lists {{bridges_wikidata|int}} bridges in the United Kingdom, but only {{bridges_wikidata_dated|int}} have a date, and only {{bridges_medieval|int}} of those are before 1540. They are the famous ones: Elvet and Framwellgate bridges in Durham, the Old Dee Bridge in Chester, the Wye Bridge in Hereford, the Monnow Bridge. The {{medieval_bridge_towns.with_n|int}} towns with one within a kilometre have a median population of {{medieval_bridge_towns.with_pop_median|int}}, against {{medieval_bridge_towns.without_pop_median|int}} for the rest. But that mostly shows which bridges get written about, not what bridges do. Only {{medieval_bridges.bridge.with_medieval_1km|int}} bridge places and {{medieval_bridges.ford.with_medieval_1km|int}} ford places have one. I would not lean on it.</p>
+<div class="note">
+  <h3>Roman roads and street fords</h3>
+  <p>Crossings sit on routes. Bridge places are a little more often within a kilometre of a Roman road in the Itiner-e atlas ({{roman_rivers.bridge.within_1km|pct}}) than ford places ({{roman_rivers.ford.within_1km|pct}}) or other places ({{roman_rivers.other.within_1km|pct}}). Adding the distance to a Roman road to the income model leaves bridge places {{premium.both_roman.bridge|apct1}} behind ford places. The best check of the road data is the "street fords": all {{street_fords.n|int}} Stratford and Stretford places lie within a kilometre of a mapped Roman road, as their name ("ford on a Roman road") says they should.</p>
+</div>
+
+<h2><span class="n">08 · Scotland</span>A side note</h2>
+<p>Scotland has no small-area income estimates to match the English and Welsh ones, and its built-up areas have no census population in the files I used, so it sits outside the main tests. Its {{scotland.bridge.n|int}} bridge places outnumber its {{scotland.ford.n|int}} fords. Wikidata gives a population for {{scotland.bridge.with_wd_pop|int}} of the bridges and {{scotland.ford.with_wd_pop|int}} of the fords, summing to {{scotland.bridge.wd_pop_sum|int}} and {{scotland.ford.wd_pop_sum|int}} people; Coatbridge alone accounts for {{scotland.bridge.top1_share|pct}} of the bridge total. Wikidata populations come from mixed years, so treat these as rough.</p>
+
+<div class="note" id="method">
+  <h3>How I did this</h3>
+  <p><b>Names.</b> I took the {{places_gb|int}} populated places in OS Open Names (cities, towns, villages, hamlets, suburban areas and other settlements). A name is a ford if its last main word ends in -ford, -fords or -forth (the northern spelling, as in Garforth); a bridge if it ends in -bridge, -bridges, -brig or -brigg. Words after "on", "upon", "in", "le" and similar are ignored, so Bradford on Avon is a ford. "Bridge of" and "Brig o'" names are bridges. In Wales, names that begin <em>Pont</em> or <em>Pen-y-bont</em> are bridges ({{welsh_pont|int}}) and names that begin <em>Rhyd</em> are fords ({{welsh_rhyd|int}}); Gaelic names beginning <em>Àth</em> are fords. A short list of names with the crossing word first (Bridgend, Brigg, Brighouse, Fordham, Fordwich) is included. Where the last word decides, Stamford Bridge and Fordingbridge are bridges.</p>
+  <p><b>Exceptions.</b> I keep a list of {{exceptions_n|int}} checked names, each with a source: Telford (named after the engineer in 1968), Gifford (a family name) and Milford Haven (Old Norse <em>fjord</em>) are taken out; Pontefract (Latin "broken bridge"), Brigg and Brighouse are added; Cambridge stays a bridge (Old English Grantebrycge, "the bridge over the Granta"). Bridgwater, Bridgnorth, Seaforth, Forth and two Welsh names whose Welsh form contains <em>ffordd</em> ("road") are flagged as uncertain ({{uncertain_n|int}} names); dropping them changes nothing. I did not check every one of the {{counts.GB.ford|int}} plus {{counts.GB.bridge|int}} names by hand, and a few will be wrong.</p>
+  <p><b>Size.</b> Each place is matched to the ONS Built-up Area 2022 of the same name whose centre is within 3 km (or 2.5 times its radius, for big towns), one place per built-up area. Its population is the sum of the Census 2021 residents of the small areas (LSOAs) whose best-fit built-up area it is. Very small built-up areas have no small area of their own and get no figure.</p>
+  <p><b>Wealth.</b> ONS income estimates for small areas, financial year ending 2023: mean total annual household income for each MSOA. A town gets the population-weighted average of the MSOAs whose best-fit built-up area it is; any other place gets the MSOA whose population-weighted centre is nearest. "Share of income" weights each resident by their area's mean household income, which assumes similar household sizes. The models use log income with region (the nine English regions and Wales) and size band as controls.</p>
+  <p><b>History.</b> Domesday places come from the Hull Domesday Project data via the realm-domesday repository; a place counts as recorded if a Domesday place within 3 km has the same name (Domesday's editorial brackets removed) or the same nearest modern name. Bridges come from Wikidata (class "bridge" and its kinds) and OpenStreetMap; only Wikidata start dates are used for the medieval test. Roman roads are the Itiner-e atlas (2025), with the datum correction from my Roman roads project. Rivers are OS Open Rivers.</p>
+  <p><b>Limits.</b> This is correlation, not causation. A name records a crossing at the time it was coined, which may be long before or after the place grew. Wikidata's bridge dates cover a small and famous minority. Income is for households, not people, and for neighbourhoods, not for the exact place; a hamlet takes the income of the area around it. London is out of the totals. Scotland and Northern Ireland have no comparable income data here.</p>
+</div>
+<div class="cta">
+  <a class="p" href="https://github.com/Tristan-Hotham/fords-and-bridges">Data and code</a>
+  <a href="https://doi.org/10.5281/zenodo.23688579">Paper (Zenodo)</a>
+  <a href="https://blog.tristanhotham.com/">More history data posts</a>
+  <a href="https://tristan-hotham.github.io/domesday-destiny/">Is Domesday destiny?</a>
+  <a href="https://tristan-hotham.github.io/dale-down-fell-beck/">Beck, brook or burn?</a>
+</div>
+<footer>
+  <p>Dr Tristan Hotham, Independent researcher. ORCID <a href="https://orcid.org/0000-0003-4931-9349">0000-0003-4931-9349</a>. Cite as: Hotham, T. (2026) Ford or Bridge? Crossing names and wealth in Britain today. Zenodo. <a href="https://doi.org/10.5281/zenodo.23688579">https://doi.org/10.5281/zenodo.23688579</a></p>
+  <p>I wrote the text, with drafting and editing assistance from Claude (Anthropic), which also helped prepare the analysis code. I reviewed and checked all text and results.</p>
+  <p>Contains OS data © Crown copyright and database right 2026 (OS Open Names, OS Open Rivers; Open Government Licence v3.0). Source: Office for National Statistics licensed under the Open Government Licence v3.0 (Census 2021; Built-up Areas 2022 and lookups; Income estimates for small areas, England and Wales, financial year ending 2023). Domesday data: Hull Domesday Project, Professor J.J.N. Palmer, George Slater and the University of Hull (CC BY-NC-SA), via the realm-domesday repository. Wikidata (CC0). © OpenStreetMap contributors (ODbL). Roman roads: Itiner-e, de Soto and others 2025 (CC BY 4.0). Base map tiles © Esri.</p>
+  <p>Because the Domesday figures are CC BY-NC-SA, the derived data and the text of this page are released under CC BY-NC-SA 4.0. The code is released under the MIT licence.</p>
+</footer>
+</div>
+<div class="tip" id="tip"></div>
+<button class="btn theme" id="theme" aria-label="Toggle dark mode">◐</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const D = /*SITE*/;
+const R = /*RESULTS*/;
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const fmt = n => n == null ? "n/a" : Math.round(n).toLocaleString("en-GB");
+const gbp = n => n == null ? "n/a" : "£" + fmt(n);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tip = document.getElementById("tip");
+function showTip(h, x, y) { tip.innerHTML = h; tip.style.display = "block"; const w = tip.offsetWidth; x = Math.max(w / 2 + 8, Math.min(innerWidth - w / 2 - 8, x)); tip.style.left = x + scrollX + "px"; tip.style.top = y + scrollY + "px"; }
+function hideTip() { tip.style.display = "none"; }
+function hover(node, h) { node.style.cursor = "pointer"; node.setAttribute("tabindex", "0"); const s = () => { const r = node.getBoundingClientRect(); showTip(h, r.left + r.width / 2, r.top); }; node.addEventListener("pointerenter", s); node.addEventListener("pointerleave", hideTip); node.addEventListener("focus", s); node.addEventListener("blur", hideTip); node.addEventListener("click", e => { s(); e.stopPropagation(); }); }
+document.addEventListener("click", hideTip);
+const redraws = [];
+function resp(box, render) { let last = 0; const go = (force) => { const w = Math.max(280, Math.round(box.clientWidth)); if (!force && Math.abs(w - last) < 4) return; last = w; box.innerHTML = ""; render(w, w < 560); }; new ResizeObserver(() => go()).observe(box); go(); redraws.push(() => go(true)); }
+const lbl = (svg, x, y, s, cls = "lab", anchor = "start") => { const t = el("text", { x, y, class: cls, "text-anchor": anchor }, svg); t.textContent = s; return t; };
+const isDark = () => { const r = document.documentElement; return r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+document.getElementById("theme").onclick = () => { const r = document.documentElement; r.dataset.theme = isDark() ? "light" : "dark"; redraws.forEach(f => f()); };
+const TC = ["var(--ford)", "var(--bridge)", "var(--other)"];
+
+/* hero mark: a river with a ford (stepping stones) and a bridge (arch) */
+(() => { const g = document.getElementById("heroMark");
+  el("path", { d: "M-100 -18 C-50 -40 -20 10 20 -8 S 80 -30 100 -12 L100 22 C70 6 40 30 10 24 S -60 6 -100 26 Z", fill: "var(--water)", opacity: .55 }, g);
+  [[-62, 2], [-46, 4], [-30, 6], [-14, 5]].forEach(([x, y]) => el("ellipse", { cx: x, cy: y, rx: 6.5, ry: 4.2, fill: "var(--ford)" }, g));
+  el("path", { d: "M18 34 L18 -4 Q48 -46 78 -4 L78 34", fill: "none", stroke: "var(--bridge)", "stroke-width": 9, "stroke-linecap": "round" }, g);
+  el("line", { x1: 4, y1: -12, x2: 92, y2: -12, stroke: "var(--bridge)", "stroke-width": 7, "stroke-linecap": "round" }, g);
+})();
+
+/* ===== map ===== */
+const REG = ["London","South East","East of England","South West","West Midlands","East Midlands","Yorkshire and The Humber","North West","North East","Wales","Scotland"];
+const PL = D.p.map((a, i) => ({ i, lat: a[0], lng: a[1], n1: a[2], n2: a[3], t: a[4], lt: a[5], cty: a[6], reg: a[7], pop: a[8], inc: a[9], own: a[10], dd: a[11], mb: a[12], rom: a[13], unc: a[14], note: a[15], rule: a[16] }));
+PL.forEach(p => p.name = p.n2 ? `${p.n1} / ${p.n2}` : p.n1);
+const ICL = [[0, 42000, "#9E3D22"], [42000, 48000, "#D9824A"], [48000, 54000, "#E7C79A"], [54000, 62000, "#8FB5CF"], [62000, 1e9, "#2B5F8E"]];
+let show = "all", colm = "type", lmap, markers = [], tiles;
+const RULES = { "ends-ford": "name ends in -ford/-forth", "ends-bridge": "name ends in -bridge/-brig", "bridge-of": "a 'Bridge of' name", "welsh-pont": "Welsh name beginning Pont", "welsh-rhyd": "Welsh name beginning Rhyd", "gaelic-ath": "Gaelic name beginning Àth", "bridge-first": "crossing word first", "ford-first": "crossing word first", "curated": "checked by hand" };
+function rad(p, z) { const f = Math.pow(1.35, Math.min(z, 11) - 6); const base = p.pop ? 2 + Math.sqrt(p.pop) / 38 : 2; return Math.max(2.2, Math.min(34, base * f)); }
+function colOf(p) { if (colm === "type") return css(p.t ? "--bridge" : "--ford"); if (p.inc == null) return css("--other"); return ICL.find(c => p.inc >= c[0] && p.inc < c[1])[2]; }
+function popup(p) {
+  const row = (k, v) => v == null || v === "" ? "" : `<dt>${k}</dt><dd>${v}</dd>`;
+  const rk = (p.rule || "").replace("-name2", "");
+  let h = `<div class="pop"><span class="tag" style="background:${css(p.t ? "--bridge" : "--ford")}">${p.t ? "Bridge" : "Ford"}</span><b class="t">${esc(p.name)}</b><div class="c">${esc(p.lt)}${p.cty ? ", " + esc(p.cty) : ""}</div><dl>`;
+  h += row("Region", esc(p.reg));
+  h += row("Population 2021", p.pop != null ? fmt(p.pop) + " (built-up area)" : (p.reg === "London" ? "part of a London borough" : "no figure of its own"));
+  h += row("Household income", p.inc != null ? gbp(p.inc) + (p.own ? " (town)" : " (nearest area)") : (p.reg === "Scotland" ? "no Scottish data" : "n/a"));
+  h += row("Domesday 1086", p.dd == null ? (p.reg === "Wales" || p.reg === "Scotland" ? "not covered" : "not matched") : (p.dd > 0 ? fmt(p.dd) + " households" : "recorded"));
+  h += row("Roman road", p.rom != null ? p.rom.toFixed(1) + " km away" : null);
+  h += row("Dated medieval bridge", p.mb ? p.mb + " within 1 km" : null);
+  h += row("Rule", RULES[rk] || rk) + "</dl>";
+  if (p.unc) h += `<div class="note">Flagged as uncertain${p.note ? ": " + esc(p.note) : "."}</div>`; else if (p.note) h += `<div class="note">${esc(p.note)}</div>`;
+  return h + "</div>";
+}
+function legend() {
+  const box = document.getElementById("legend");
+  const nF = PL.filter(p => p.t === 0).length, nB = PL.filter(p => p.t === 1).length;
+  if (colm === "type") box.innerHTML = `<span><i style="background:var(--ford)"></i>Ford (${fmt(nF)})</span><span><i style="background:var(--bridge)"></i>Bridge (${fmt(nB)})</span><span>Dot size = 2021 population of the built-up area</span>`;
+  else box.innerHTML = "<span>Mean household income:</span>" + ICL.map((c, i) => `<span><i style="background:${c[2]}"></i>${i === 0 ? "under £42k" : i === ICL.length - 1 ? "£62k and over" : "£" + c[0] / 1000 + "k to £" + c[1] / 1000 + "k"}</span>`).join("") + `<span><i style="background:var(--other)"></i>No data (Scotland)</span>`;
+}
+function restyle() { const z = lmap.getZoom(), bg = css("--bg"); markers.forEach(m => { const p = m.p, on = show === "all" || +show === p.t; m.setStyle({ fillColor: colOf(p), color: bg, radius: rad(p, z), fillOpacity: on ? .85 : 0, opacity: on ? .9 : 0 }); if (on) m.addTo(lmap); else m.remove(); }); legend(); }
+function tileUrl() { return `https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_${isDark() ? "Dark" : "Light"}_Gray_Base/MapServer/tile/{z}/{y}/{x}`; }
+(() => {
+  if (!window.L) { document.getElementById("lmap").innerHTML = '<p style="padding:16px">The map library did not load.</p>'; return; }
+  lmap = L.map("lmap", { preferCanvas: true, zoomSnap: 0.5, minZoom: 5, maxZoom: 15, scrollWheelZoom: false });
+  lmap.fitBounds([[50.0, -6.0], [58.6, 1.8]], { padding: [6, 6] });
+  tiles = L.tileLayer(tileUrl(), { attribution: "Tiles &copy; Esri", maxZoom: 16 }).addTo(lmap);
+  const rend = L.canvas({ padding: 0.5, tolerance: 3 });
+  const z = lmap.getZoom();
+  [...PL].sort((a, b) => (b.pop || 0) - (a.pop || 0)).forEach(p => {
+    const m = L.circleMarker([p.lat, p.lng], { renderer: rend, radius: rad(p, z), weight: 0.7, color: css("--bg"), opacity: .9, fillColor: colOf(p), fillOpacity: .85 });
+    m.p = p; m.bindPopup(() => popup(p), { maxWidth: 300, autoPanPadding: [20, 20] }); m.addTo(lmap); markers.push(m); p.m = m; });
+  lmap.on("zoomend", restyle);
+  lmap.on("click focus", () => lmap.scrollWheelZoom.enable());
+  lmap.getContainer().addEventListener("mouseleave", () => lmap.scrollWheelZoom.disable());
+  legend();
+  document.querySelectorAll("[data-show]").forEach(b => b.onclick = () => { show = b.dataset.show; document.querySelectorAll("[data-show]").forEach(x => x.setAttribute("aria-pressed", x === b)); restyle(); });
+  document.querySelectorAll("[data-col]").forEach(b => b.onclick = () => { colm = b.dataset.col; document.querySelectorAll("[data-col]").forEach(x => x.setAttribute("aria-pressed", x === b)); restyle(); });
+  redraws.push(() => { tiles.setUrl(tileUrl()); restyle(); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => redraws.forEach(f => f()));
+})();
+
+/* search */
+(() => {
+  const q = document.getElementById("q"), sug = document.getElementById("sug");
+  const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/['.]/g, "").replace(/\s+/g, " ").trim();
+  PL.forEach(p => p.key = norm(p.name));
+  let list = [], sel = -1;
+  function go(p) { sug.style.display = "none"; q.setAttribute("aria-expanded", "false"); q.value = p.name; if (!lmap) return; if (show !== "all" && +show !== p.t) document.querySelector('[data-show="all"]').click(); lmap.setView([p.lat, p.lng], 11); setTimeout(() => p.m.openPopup(), 300); }
+  function render() { sug.innerHTML = list.map((p, i) => `<li role="option" aria-selected="${i === sel}" data-i="${i}">${esc(p.name)} <span>${p.t ? "bridge" : "ford"}, ${esc(p.cty || p.reg)}</span></li>`).join(""); sug.style.display = list.length ? "block" : "none"; q.setAttribute("aria-expanded", list.length > 0); }
+  q.addEventListener("input", () => { const t = norm(q.value); sel = -1; if (t.length < 2) { list = []; render(); return; }
+    const a = PL.filter(p => p.key.startsWith(t)), b = PL.filter(p => !p.key.startsWith(t) && p.key.includes(t));
+    list = [...a.sort((x, y) => (y.pop || 0) - (x.pop || 0)), ...b].slice(0, 10); render(); });
+  q.addEventListener("keydown", e => { if (!list.length) return; if (e.key === "ArrowDown") { sel = Math.min(list.length - 1, sel + 1); render(); e.preventDefault(); } else if (e.key === "ArrowUp") { sel = Math.max(0, sel - 1); render(); e.preventDefault(); } else if (e.key === "Enter") { go(list[Math.max(0, sel)]); e.preventDefault(); } else if (e.key === "Escape") { list = []; render(); } });
+  sug.addEventListener("click", e => { const li = e.target.closest("li"); if (li) go(list[+li.dataset.i]); e.stopPropagation(); });
+  document.addEventListener("click", e => { if (e.target !== q) { sug.style.display = "none"; q.setAttribute("aria-expanded", "false"); } });
+})();
+
+/* ===== totals ===== */
+resp(document.getElementById("totals"), (W, nar) => {
+  const T = R.totals, rows = [["Residents", "pop_share", T.ford.pop, T.bridge.pop], ["Household income", "income_share", null, null]];
+  const H = 210, m = { l: nar ? 0 : 140, r: 70, t: 8 }, bw = W - m.l - m.r;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Share of residents and of household income in ford and bridge towns" }, document.getElementById("totals"));
+  const max = Math.max(T.ford.pop_share, T.ford.income_share) * 1.05, X = v => m.l + v / max * bw;
+  rows.forEach((r, i) => { const y0 = m.t + i * 100 + (nar ? 18 : 0);
+    lbl(svg, nar ? 0 : m.l - 10, nar ? y0 - 4 : y0 + 30, r[0], "lab b", nar ? "start" : "end");
+    [["ford", 0], ["bridge", 1]].forEach(([k, j]) => { const v = T[k][r[1]], y = y0 + j * 34;
+      const b = el("rect", { x: m.l, y, width: Math.max(2, X(v) - m.l), height: 26, rx: 2, fill: TC[j] }, svg);
+      hover(b, `<b>${k === "ford" ? "Ford" : "Bridge"} towns</b><br>${fmt(T[k].n)} built-up areas<br>${fmt(T[k].pop)} residents (${(T[k].pop_share * 100).toFixed(1)}% of England and Wales)<br>${(T[k].income_share * 100).toFixed(1)}% of household income`);
+      lbl(svg, X(v) + 6, y + 18, (v * 100).toFixed(1) + "%" + (i === 0 ? "  " + (T[k].pop / 1e6).toFixed(2) + "m" : ""), "lab b"); }); });
+  lbl(svg, m.l, H - 4, "Share of England and Wales", "lab m s");
+});
+
+/* top tables */
+const topT = (rows) => `<thead><tr><th>Place</th><th class="num">People</th><th class="num">Income</th></tr></thead><tbody>` + rows.slice(0, 10).map(r => `<tr><td>${esc(r.name)}<small>${esc(r.region)}</small></td><td class="num">${fmt(r.pop)}</td><td class="num">${gbp(r.inc)}</td></tr>`).join("") + "</tbody>";
+document.getElementById("topF").innerHTML = topT(R.top_ford);
+document.getElementById("topB").innerHTML = topT(R.top_bridge);
+
+/* ===== histogram ===== */
+resp(document.getElementById("hist"), (W, nar) => {
+  const H = nar ? 260 : 300, m = { l: 40, r: 10, t: 30, b: 40 }, B = R.hist.bins, n = B.length - 1;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Distribution of household income by name type" }, document.getElementById("hist"));
+  const max = Math.max(...R.hist.ford, ...R.hist.bridge, ...R.hist.other) * 1.08;
+  const X = i => m.l + i / n * (W - m.l - m.r), Y = v => H - m.b - v / max * (H - m.t - m.b);
+  [0, .05, .1, .15, .2].filter(v => v < max).forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--rule)" }, svg); lbl(svg, m.l - 6, Y(v) + 4, Math.round(v * 100) + "%", "lab m s", "end"); });
+  for (let i = 0; i <= n; i += 2) lbl(svg, X(i), H - m.b + 16, "£" + B[i] / 1000 + "k", "lab m s", "middle");
+  lbl(svg, (m.l + W - m.r) / 2, H - 6, "Mean household income (lowest and highest bands include everything beyond)", "lab m s", "middle");
+  [["other", 2], ["ford", 0], ["bridge", 1]].forEach(([k, j]) => { const v = R.hist[k];
+    const d = v.map((y, i) => `${i ? "L" : "M"}${X(i)} ${Y(y)}H${X(i + 1)}`).join("");
+    el("path", { d, fill: "none", stroke: TC[j], "stroke-width": k === "other" ? 1.6 : 2.6, "stroke-dasharray": k === "other" ? "4 4" : "" }, svg);
+    v.forEach((y, i) => { const r = el("rect", { x: X(i), y: m.t, width: X(i + 1) - X(i), height: H - m.t - m.b, fill: "transparent" }, svg); if (k === "bridge") hover(r, `<b>£${B[i] / 1000}k to £${B[i + 1] / 1000}k</b><br>Fords ${(R.hist.ford[i] * 100).toFixed(1)}%<br>Bridges ${(R.hist.bridge[i] * 100).toFixed(1)}%<br>Other ${(R.hist.other[i] * 100).toFixed(1)}%`); }); });
+  [["Fords", 0], ["Bridges", 1], ["Other places", 2]].forEach(([t, j], i) => { const x = m.l + 8 + i * (nar ? 92 : 120); el("rect", { x, y: 8, width: 14, height: 4, fill: TC[j] }, svg); lbl(svg, x + 20, 14, t, "lab s"); });
+});
+
+/* ===== size-matched bars ===== */
+resp(document.getElementById("sizebars"), (W, nar) => {
+  const rows = R.size_matched, rowH = 74, m = { l: nar ? 0 : 200, r: 70, t: 6 }, H = rows.length * rowH + 24;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Median household income of ford and bridge places by size band" }, document.getElementById("sizebars"));
+  const lo = 40000, hi = 75000, X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  rows.forEach((r, i) => { const y0 = m.t + i * rowH + (nar ? 16 : 0);
+    lbl(svg, nar ? 0 : m.l - 10, nar ? y0 - 3 : y0 + 26, r.size, "lab b", nar ? "start" : "end");
+    [["ford", 0], ["bridge", 1], ["other", 2]].forEach(([k, j]) => { const v = r[k].median; if (v == null) return; const y = y0 + j * 18;
+      const b = el("rect", { x: m.l, y, width: Math.max(2, X(v) - m.l), height: 15, rx: 2, fill: TC[j], opacity: k === "other" ? .6 : 1 }, svg);
+      hover(b, `<b>${r.size}</b><br>${k === "other" ? "Other places" : k === "ford" ? "Fords" : "Bridges"}: ${fmt(r[k].n)} places<br>Median income ${gbp(v)}`);
+      lbl(svg, X(v) + 5, y + 12, gbp(v) + "  n=" + fmt(r[k].n), "lab s"); }); });
+  lbl(svg, m.l, H - 4, "Bars start at £40,000", "lab m s");
+});
+
+/* ===== regions ===== */
+resp(document.getElementById("regions"), (W, nar) => {
+  const rows = R.regions, rowH = nar ? 48 : 34, m = { l: nar ? 8 : 190, r: 16, t: 26 }, H = rows.length * rowH + m.t + 26;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Median income of ford and bridge places by region" }, document.getElementById("regions"));
+  const lo = 38000, hi = 80000, X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  [40000, 50000, 60000, 70000, 80000].forEach(v => { el("line", { x1: X(v), x2: X(v), y1: m.t - 6, y2: H - 24, stroke: "var(--rule)" }, svg); lbl(svg, X(v), m.t - 10, "£" + v / 1000 + "k", "lab m s", "middle"); });
+  rows.forEach((r, i) => { const y = m.t + i * rowH + (nar ? 30 : 14);
+    lbl(svg, nar ? m.l : m.l - 12, nar ? y - 14 : y + 4, r.region, "lab", nar ? "start" : "end");
+    const f = r.ford.median, b = r.bridge.median, o = r.other.median;
+    el("line", { x1: X(o), x2: X(o), y1: y - 9, y2: y + 9, stroke: "var(--other)", "stroke-width": 2 }, svg);
+    el("line", { x1: X(f), x2: X(b), y1: y, y2: y, stroke: "var(--muted)", "stroke-width": 1.5 }, svg);
+    [[f, 0, "ford"], [b, 1, "bridge"]].forEach(([v, j, k]) => { const c = el("circle", { cx: X(v), cy: y, r: 7, fill: TC[j], stroke: "var(--bg)", "stroke-width": 1.5 }, svg);
+      hover(c, `<b>${r.region}</b><br>Fords: ${gbp(f)} (${r.ford.n} places)<br>Bridges: ${gbp(b)} (${r.bridge.n} places)<br>Other: ${gbp(o)}`); });
+    const right = Math.max(f, b); if (!nar) lbl(svg, X(right) + 12, y + 4, `${r.ford.n} / ${r.bridge.n}`, "lab m s"); });
+  lbl(svg, m.l, H - 6, nar ? "Median of mean household income" : "Median of mean household income. Labels: number of ford / bridge places.", "lab m s");
+});
+
+/* ===== premium forest ===== */
+resp(document.getElementById("premium"), (W, nar) => {
+  const P = R.premium, Rb = R.robust;
+  const rows = [["Raw", P.raw], ["Same size band", P.size], ["Same region", P.region], ["Same region and size", P.both, 1], ["+ type of place", P.both_plus_type], ["+ Roman road distance", P.both_roman], ["Without uncertain names", Rb.no_uncertain], ["Without two-word names", Rb.no_standalone], ["England only", Rb.england], ["Income after housing costs", Rb.net_ahc_bua]];
+  const rowH = nar ? 44 : 30, m = { l: nar ? 8 : 210, r: 54, t: 22 }, H = rows.length * rowH + m.t + 26;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Bridge premium estimates with confidence intervals" }, document.getElementById("premium"));
+  const lo = -0.14, hi = 0.08, X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  [-0.1, -0.05, 0, 0.05].forEach(v => { el("line", { x1: X(v), x2: X(v), y1: m.t - 6, y2: H - 24, stroke: v === 0 ? "var(--fg)" : "var(--rule)", "stroke-width": v === 0 ? 1.4 : 1 }, svg); lbl(svg, X(v), m.t - 10, (v > 0 ? "+" : "") + Math.round(v * 100) + "%", "lab m s", "middle"); });
+  lbl(svg, X(-0.005), H - 6, "\u2190 fords richer", "lab s", "end"); lbl(svg, X(0.005), H - 6, "bridges \u2192", "lab s", "start");
+  rows.forEach(([t, e, key], i) => { const y = m.t + i * rowH + (nar ? 26 : 12);
+    if (i === 6) el("line", { x1: 0, x2: W, y1: y - (nar ? 26 : 15), y2: y - (nar ? 26 : 15), stroke: "var(--rule)", "stroke-dasharray": "2 3" }, svg);
+    lbl(svg, nar ? m.l : m.l - 10, nar ? y - 11 : y + 4, t, key ? "lab b" : "lab", nar ? "start" : "end");
+    el("line", { x1: X(e.lo), x2: X(e.hi), y1: y, y2: y, stroke: e.bridge < 0 ? "var(--ford)" : "var(--bridge)", "stroke-width": 3, "stroke-linecap": "round" }, svg);
+    const c = el("circle", { cx: X(e.bridge), cy: y, r: key ? 7 : 5.5, fill: e.bridge < 0 ? "var(--ford)" : "var(--bridge)", stroke: "var(--bg)", "stroke-width": 1.5 }, svg);
+    hover(c, `<b>${t}</b><br>Bridge vs ford: ${(e.bridge * 100).toFixed(1)}%<br>95% interval ${(e.lo * 100).toFixed(1)}% to ${(e.hi * 100).toFixed(1)}%<br>N = ${fmt(e.n)}`);
+    lbl(svg, W - m.r + 6, y + 4, (e.bridge > 0 ? "+" : "") + (e.bridge * 100).toFixed(1) + "%", "lab s b"); });
+});
+
+/* ===== Domesday shares ===== */
+resp(document.getElementById("dd"), (W, nar) => {
+  const d = R.domesday, rows = [["Fords", d.ford, 0], ["Bridges", d.bridge, 1], ["Other places", d.other, 2]];
+  const rowH = 40, m = { l: nar ? 100 : 130, r: 120, t: 4 }, H = rows.length * rowH + 22;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Share recorded in Domesday Book by name type" }, document.getElementById("dd"));
+  const X = v => m.l + v * (W - m.l - m.r);
+  rows.forEach(([t, r, j], i) => { const y = m.t + i * rowH;
+    lbl(svg, m.l - 10, y + 20, t, "lab b", "end");
+    el("rect", { x: m.l, y: y + 4, width: W - m.l - m.r, height: 24, fill: "var(--panel)" }, svg);
+    const b = el("rect", { x: m.l, y: y + 4, width: X(r.share_tv) - m.l, height: 24, fill: TC[j] }, svg);
+    hover(b, `<b>${t}</b><br>${fmt(r.n_tv)} towns and villages in England<br>${(r.share_tv * 100).toFixed(0)}% recorded in Domesday<br>Median 1086 households: ${r.hh_median}`);
+    lbl(svg, X(r.share_tv) + 6, y + 21, Math.round(r.share_tv * 100) + "% of " + fmt(r.n_tv), "lab b"); });
+});
+</script>
+</body>
+</html>
