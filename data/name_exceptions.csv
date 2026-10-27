@@ -1,0 +1,14 @@
+name,country,decision,cls,confidence,note,source
+Telford,England,exclude,other,sure,"New town renamed Telford in 1968 after the civil engineer Thomas Telford; not a ford name",https://en.wikipedia.org/wiki/Telford
+Gifford,Scotland,exclude,other,sure,"Named from the 13th-century Sir Hugo de Giffard of Yester; not a ford name",https://en.wikipedia.org/wiki/Gifford%2C_East_Lothian
+Milford Haven,Wales,exclude,other,sure,"Milford is from Old Norse Melfjordr, 'fjord of the sandbank'; not a ford",https://en.wikipedia.org/wiki/Milford_Haven_Waterway
+Seaforth,England,keep,ford,uncertain,"Recorded as Safforde 'sea ford' in 1128, but also explained as Old Norse 'sea inlet' or as taken from Seaforth House; kept as ford but flagged",https://en.wikipedia.org/wiki/Seaforth%2C_Merseyside
+Bridgwater,England,add,bridge,uncertain,"Origin disputed: possibly Old English brycg or Old Norse bryggja 'quay', with Walter of Douai; also read as 'Walter's bridge'; added as bridge but flagged",https://en.wikipedia.org/wiki/Bridgwater
+Bridgnorth,England,add,bridge,uncertain,"Crossing word first (bridge over the Severn); I could not re-read a source for the detail in this study, so it is flagged",https://en.wikipedia.org/wiki/Bridgnorth
+Brigg,England,add,bridge,sure,"Old Norse bryggja 'jetty, quay', here referring to the bridge over the River Ancholme (the town was Glanford Brigg)",https://epns.nottingham.ac.uk/browse/Lincolnshire/Glanford+Brigg/53286846b47fc40b93000fb3-Glanford+Brigg
+Brighouse,England,add,bridge,sure,"'Bridge house': a building on or close to the bridge over the River Calder",https://en.wikipedia.org/wiki/Brighouse
+Pontefract,England,add,bridge,sure,"Latin pons fractus, 'broken bridge'",https://epns.nottingham.ac.uk/browse/West+Riding+of+Yorkshire/Pontefract/5328827cb47fc40c810061f9-Pontefract
+Cambridge,England,keep,bridge,sure,"Old English Grantebrycge: the name came to mean 'the bridge over the Granta'; kept as a bridge",https://epns.nottingham.ac.uk/browse/id/53287310b47fc40c4f000001-Cambridge
+Pontcanna,Wales,keep,bridge,sure,"From Pont Canna Farm, named after a bridge across the Whitehouse Brook",https://en.wikipedia.org/wiki/Pontcanna
+Bridport,England,checked,other,sure,"From Brydian 'place at the (River) Bride' plus port 'market town'; not a bridge (the rules do not catch it)",https://en.wikipedia.org/wiki/Bridport
+Bridlington,England,checked,other,sure,"A personal name plus -ingtun; recorded as Bretlinton in 1086; not a bridge (the rules do not catch it)",https://en.wikipedia.org/wiki/Bridlington

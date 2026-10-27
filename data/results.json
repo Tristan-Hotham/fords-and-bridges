@@ -1,0 +1,1468 @@
+{
+ "places_gb": 43274,
+ "counts": {
+  "England": {
+   "ford": 1034,
+   "bridge": 434,
+   "other": 31958
+  },
+  "Scotland": {
+   "ford": 45,
+   "bridge": 99,
+   "other": 5938
+  },
+  "Wales": {
+   "ford": 50,
+   "bridge": 110,
+   "other": 3606
+  },
+  "GB": {
+   "ford": 1129,
+   "bridge": 643,
+   "other": 41502
+  }
+ },
+ "ford_per_bridge_gb": 1.76,
+ "uncertain_n": 6,
+ "uncertain_names": [
+  "Bridgnorth",
+  "Bridgwater",
+  "Brynffordd",
+  "Chwitffordd",
+  "Forth",
+  "Seaforth"
+ ],
+ "rules": {
+  "ends-ford": 1077,
+  "ends-bridge": 497,
+  "welsh-pont": 85,
+  "bridge-first": 36,
+  "welsh-rhyd": 34,
+  "bridge-of": 15,
+  "ford-first": 13,
+  "curated": 5,
+  "ends-ford-name2": 3,
+  "ends-bridge-name2": 3,
+  "gaelic-ath-name2": 1,
+  "bridge-first-name2": 1,
+  "welsh-rhyd-name2": 1,
+  "welsh-pont-name2": 1
+ },
+ "welsh_pont": 86,
+ "welsh_rhyd": 35,
+ "bridge_of": 15,
+ "standalone_word": {
+  "ford": 39,
+  "bridge": 207
+ },
+ "by_type": {
+  "bridge": {
+   "City": 1,
+   "Hamlet": 193,
+   "Other Settlement": 36,
+   "Suburban Area": 168,
+   "Town": 40,
+   "Village": 205
+  },
+  "ford": {
+   "City": 5,
+   "Hamlet": 345,
+   "Other Settlement": 61,
+   "Suburban Area": 179,
+   "Town": 47,
+   "Village": 492
+  }
+ },
+ "ew_places": 37192,
+ "ew_counts": {
+  "ford": 1084,
+  "bridge": 544,
+  "other": 35564
+ },
+ "london_bua_dropped": [
+  "Redbridge"
+ ],
+ "bua_unit_n": {
+  "ford": 144,
+  "bridge": 69,
+  "other": 3731
+ },
+ "bua_n_total_ew": 3944,
+ "totals": {
+  "ford": {
+   "n": 144,
+   "pop": 2290193,
+   "pop_share": 0.0384,
+   "income_share": 0.0384,
+   "inc_popweighted": 55537.0,
+   "inc_median": 58732.0,
+   "pop_median": 3466.0,
+   "pop_mean": 15904.0,
+   "inc_q25": 51568.0,
+   "inc_q75": 65792.0,
+   "n_over_20k": 28
+  },
+  "bridge": {
+   "n": 69,
+   "pop": 867692,
+   "pop_share": 0.0146,
+   "income_share": 0.0146,
+   "inc_popweighted": 55664.0,
+   "inc_median": 51752.0,
+   "pop_median": 4332.0,
+   "pop_mean": 12575.0,
+   "inc_q25": 46238.0,
+   "inc_q75": 59058.0,
+   "n_over_20k": 13
+  },
+  "other": {
+   "n": 3731,
+   "pop": 41853516,
+   "pop_share": 0.7023,
+   "income_share": 0.6459,
+   "inc_popweighted": 51166.0,
+   "inc_median": 52884.0,
+   "pop_median": 2765.0,
+   "pop_mean": 11218.0,
+   "inc_q25": 45752.0,
+   "inc_q75": 61615.0,
+   "n_over_20k": 415
+  }
+ },
+ "ford_popweighted_without_bradford": 57738.0,
+ "bridge_popweighted_without_cambridge": 52499.0,
+ "msoa_pop_median": 7956,
+ "ew_pop_total": 59597664,
+ "ew_inc_popweighted": 55636.0,
+ "ford_bridge_pop_ratio": 2.64,
+ "ford_bridge_income_ratio": 2.63,
+ "ford_bridge_n_ratio": 2.09,
+ "bridge_minus_ford_popweighted": 127.0,
+ "bridge_minus_ford_median_bua": -6980.0,
+ "top_ford": [
+  {
+   "name": "Bradford",
+   "bua": "Bradford",
+   "pop": 331757,
+   "inc": 42540.0,
+   "region": "Yorkshire and The Humber",
+   "county": ""
+  },
+  {
+   "name": "Oxford",
+   "bua": "Oxford",
+   "pop": 166279,
+   "inc": 64869.0,
+   "region": "South East",
+   "county": "Oxfordshire"
+  },
+  {
+   "name": "Watford",
+   "bua": "Watford (Watford)",
+   "pop": 130965,
+   "inc": 61740.0,
+   "region": "East of England",
+   "county": "Hertfordshire"
+  },
+  {
+   "name": "Chelmsford",
+   "bua": "Chelmsford",
+   "pop": 108884,
+   "inc": 67111.0,
+   "region": "East of England",
+   "county": "Essex"
+  },
+  {
+   "name": "Salford",
+   "bua": "Salford",
+   "pop": 108494,
+   "inc": 44290.0,
+   "region": "North West",
+   "county": ""
+  },
+  {
+   "name": "Bedford",
+   "bua": "Bedford",
+   "pop": 98257,
+   "inc": 51807.0,
+   "region": "East of England",
+   "county": "Bedford"
+  },
+  {
+   "name": "Ashford",
+   "bua": "Ashford (Ashford)",
+   "pop": 78945,
+   "inc": 56245.0,
+   "region": "South East",
+   "county": "Kent"
+  },
+  {
+   "name": "Guildford",
+   "bua": "Guildford",
+   "pop": 76392,
+   "inc": 69818.0,
+   "region": "South East",
+   "county": "Surrey"
+  },
+  {
+   "name": "Stafford",
+   "bua": "Stafford",
+   "pop": 73549,
+   "inc": 53235.0,
+   "region": "West Midlands",
+   "county": "Staffordshire"
+  },
+  {
+   "name": "Dartford",
+   "bua": "Dartford",
+   "pop": 68713,
+   "inc": 65083.0,
+   "region": "South East",
+   "county": "Kent"
+  },
+  {
+   "name": "Hereford",
+   "bua": "Hereford",
+   "pop": 59910,
+   "inc": 47148.0,
+   "region": "West Midlands",
+   "county": "County of Herefordshire"
+  },
+  {
+   "name": "Kingswinford",
+   "bua": "Kingswinford",
+   "pop": 51368,
+   "inc": 50752.0,
+   "region": "West Midlands",
+   "county": ""
+  }
+ ],
+ "ford_pop_without_top1": 1958436,
+ "richest_ford": [
+  {
+   "name": "Twyford",
+   "pop": 9020,
+   "inc": 82630.0,
+   "region": "South East"
+  },
+  {
+   "name": "Ickford",
+   "pop": 1798,
+   "inc": 78686.0,
+   "region": "South East"
+  },
+  {
+   "name": "Shalford",
+   "pop": 1854,
+   "inc": 76254.0,
+   "region": "South East"
+  },
+  {
+   "name": "Twyford",
+   "pop": 1691,
+   "inc": 73291.0,
+   "region": "South East"
+  },
+  {
+   "name": "Duxford",
+   "pop": 1505,
+   "inc": 72956.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Whittlesford",
+   "pop": 1237,
+   "inc": 72956.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Great Chesterford",
+   "pop": 1988,
+   "inc": 72956.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Upper Heyford",
+   "pop": 3243,
+   "inc": 72864.0,
+   "region": "South East"
+  }
+ ],
+ "poorest_ford": [
+  {
+   "name": "Cornforth",
+   "pop": 2425,
+   "inc": 31483.0,
+   "region": "North East"
+  },
+  {
+   "name": "Alford",
+   "pop": 3554,
+   "inc": 36410.0,
+   "region": "East Midlands"
+  },
+  {
+   "name": "Stainforth",
+   "pop": 6065,
+   "inc": 38033.0,
+   "region": "Yorkshire and The Humber"
+  },
+  {
+   "name": "Belford",
+   "pop": 1960,
+   "inc": 39346.0,
+   "region": "North East"
+  },
+  {
+   "name": "Stakeford",
+   "pop": 7360,
+   "inc": 40704.0,
+   "region": "North East"
+  },
+  {
+   "name": "Ammanford / Rhydaman",
+   "pop": 7837,
+   "inc": 41082.0,
+   "region": "Wales"
+  },
+  {
+   "name": "Gainford",
+   "pop": 2345,
+   "inc": 41400.0,
+   "region": "North East"
+  },
+  {
+   "name": "Old Trafford",
+   "pop": 22551,
+   "inc": 42160.0,
+   "region": "North West"
+  }
+ ],
+ "top_bridge": [
+  {
+   "name": "Cambridge",
+   "bua": "Cambridge (Cambridge)",
+   "pop": 149510,
+   "inc": 70865.0,
+   "region": "East of England",
+   "county": "Cambridgeshire"
+  },
+  {
+   "name": "Stourbridge",
+   "bua": "Stourbridge",
+   "pop": 58064,
+   "inc": 51346.0,
+   "region": "West Midlands",
+   "county": ""
+  },
+  {
+   "name": "Royal Tunbridge Wells",
+   "bua": "Royal Tunbridge Wells",
+   "pop": 51205,
+   "inc": 69170.0,
+   "region": "South East",
+   "county": "Kent"
+  },
+  {
+   "name": "Pen-y-bont ar Ogwr / Bridgend",
+   "bua": "Bridgend",
+   "pop": 51012,
+   "inc": 50356.0,
+   "region": "Wales",
+   "county": "Pen-y-bont ar Ogwr - Bridgend"
+  },
+  {
+   "name": "Bridgwater",
+   "bua": "Bridgwater",
+   "pop": 49418,
+   "inc": 46238.0,
+   "region": "South West",
+   "county": "Somerset"
+  },
+  {
+   "name": "Trowbridge",
+   "bua": "Trowbridge",
+   "pop": 42400,
+   "inc": 54666.0,
+   "region": "South West",
+   "county": "Wiltshire"
+  },
+  {
+   "name": "Bamber Bridge",
+   "bua": "Bamber Bridge",
+   "pop": 40153,
+   "inc": 46421.0,
+   "region": "North West",
+   "county": "Lancashire"
+  },
+  {
+   "name": "Tonbridge",
+   "bua": "Tonbridge",
+   "pop": 37210,
+   "inc": 64815.0,
+   "region": "South East",
+   "county": "Kent"
+  },
+  {
+   "name": "Pontefract",
+   "bua": "Pontefract",
+   "pop": 32973,
+   "inc": 46443.0,
+   "region": "Yorkshire and The Humber",
+   "county": ""
+  },
+  {
+   "name": "Brighouse",
+   "bua": "Brighouse",
+   "pop": 32643,
+   "inc": 49534.0,
+   "region": "Yorkshire and The Humber",
+   "county": ""
+  },
+  {
+   "name": "Pontypridd",
+   "bua": "Pontypridd",
+   "pop": 31903,
+   "inc": 43097.0,
+   "region": "Wales",
+   "county": "Rhondda Cynon Taf - Rhondda Cynon Taf"
+  },
+  {
+   "name": "Pontypool / Pont-y-pŵl",
+   "bua": "Pontypool",
+   "pop": 27733,
+   "inc": 43335.0,
+   "region": "Wales",
+   "county": "Torfaen - Torfaen"
+  }
+ ],
+ "bridge_pop_without_top1": 718182,
+ "richest_bridge": [
+  {
+   "name": "Weybridge",
+   "pop": 16298,
+   "inc": 78080.0,
+   "region": "South East"
+  },
+  {
+   "name": "Broadbridge Heath",
+   "pop": 6355,
+   "inc": 71759.0,
+   "region": "South East"
+  },
+  {
+   "name": "Abridge",
+   "pop": 2051,
+   "inc": 71657.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Cambridge",
+   "pop": 149510,
+   "inc": 70865.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Groombridge",
+   "pop": 1733,
+   "inc": 70588.0,
+   "region": "South East"
+  },
+  {
+   "name": "Royal Tunbridge Wells",
+   "pop": 51205,
+   "inc": 69170.0,
+   "region": "South East"
+  },
+  {
+   "name": "Stanbridge",
+   "pop": 1972,
+   "inc": 68979.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Felbridge",
+   "pop": 2323,
+   "inc": 68050.0,
+   "region": "South East"
+  }
+ ],
+ "poorest_bridge": [
+  {
+   "name": "Pontlottyn",
+   "pop": 1832,
+   "inc": 35374.0,
+   "region": "Wales"
+  },
+  {
+   "name": "Pontycymer",
+   "pop": 2424,
+   "inc": 37185.0,
+   "region": "Wales"
+  },
+  {
+   "name": "Friday Bridge",
+   "pop": 1494,
+   "inc": 39412.0,
+   "region": "East of England"
+  },
+  {
+   "name": "Sutton Bridge",
+   "pop": 4532,
+   "inc": 39883.0,
+   "region": "East Midlands"
+  },
+  {
+   "name": "Highbridge",
+   "pop": 4364,
+   "inc": 40082.0,
+   "region": "South West"
+  },
+  {
+   "name": "Trecceln / Newbridge",
+   "pop": 5609,
+   "inc": 40807.0,
+   "region": "Wales"
+  },
+  {
+   "name": "Merlin's Bridge",
+   "pop": 2221,
+   "inc": 42590.0,
+   "region": "Wales"
+  },
+  {
+   "name": "Pontypridd",
+   "pop": 31903,
+   "inc": 43097.0,
+   "region": "Wales"
+  }
+ ],
+ "place_unit_n": {
+  "ford": 1084,
+  "bridge": 544,
+  "other": 35563
+ },
+ "place_median_inc": {
+  "ford": 55028.0,
+  "bridge": 49534.0,
+  "other": 51623.0
+ },
+ "hist": {
+  "bins": [
+   25000,
+   30000,
+   35000,
+   40000,
+   45000,
+   50000,
+   55000,
+   60000,
+   65000,
+   70000,
+   75000,
+   80000,
+   85000,
+   90000,
+   95000,
+   100000,
+   105000
+  ],
+  "ford": [
+   0.0,
+   0.0046,
+   0.0424,
+   0.1098,
+   0.1633,
+   0.179,
+   0.1762,
+   0.1255,
+   0.0876,
+   0.0563,
+   0.0369,
+   0.0065,
+   0.0046,
+   0.0074,
+   0.0,
+   0.0
+  ],
+  "bridge": [
+   0.0018,
+   0.0092,
+   0.1103,
+   0.2059,
+   0.1875,
+   0.1691,
+   0.125,
+   0.0699,
+   0.0496,
+   0.0368,
+   0.0184,
+   0.0092,
+   0.0037,
+   0.0037,
+   0.0,
+   0.0
+  ],
+  "other": [
+   0.0009,
+   0.0102,
+   0.07,
+   0.1654,
+   0.1881,
+   0.1758,
+   0.1355,
+   0.0973,
+   0.0666,
+   0.0455,
+   0.0249,
+   0.0097,
+   0.0041,
+   0.0031,
+   0.0011,
+   0.0017
+  ]
+ },
+ "place_share_town": {
+  "ford": 0.047,
+  "bridge": 0.0717,
+  "other": 0.0314
+ },
+ "size_matched": [
+  {
+   "size": "No figure (small place)",
+   "ford": {
+    "n": 940,
+    "median": 54366.0
+   },
+   "bridge": {
+    "n": 474,
+    "median": 49078.0
+   },
+   "other": {
+    "n": 31808,
+    "median": 51531.0
+   }
+  },
+  {
+   "size": "Under 5,000",
+   "ford": {
+    "n": 89,
+    "median": 59762.0
+   },
+   "bridge": {
+    "n": 39,
+    "median": 53351.0
+   },
+   "other": {
+    "n": 2514,
+    "median": 54366.0
+   }
+  },
+  {
+   "size": "5,000 to 20,000",
+   "ford": {
+    "n": 27,
+    "median": 56103.0
+   },
+   "bridge": {
+    "n": 17,
+    "median": 48464.0
+   },
+   "other": {
+    "n": 806,
+    "median": 51015.0
+   }
+  },
+  {
+   "size": "20,000 to 100,000",
+   "ford": {
+    "n": 23,
+    "median": 54247.0
+   },
+   "bridge": {
+    "n": 12,
+    "median": 47989.0
+   },
+   "other": {
+    "n": 353,
+    "median": 48402.0
+   }
+  },
+  {
+   "size": "100,000 and over",
+   "ford": {
+    "n": 5,
+    "median": 61740.0
+   },
+   "bridge": {
+    "n": 2,
+    "median": 72658.0
+   },
+   "other": {
+    "n": 82,
+    "median": 53193.0
+   }
+  }
+ ],
+ "size_share": {
+  "ford": {
+   "No figure (small place)": 0.8672,
+   "Under 5,000": 0.0821,
+   "5,000 to 20,000": 0.0249,
+   "20,000 to 100,000": 0.0212,
+   "100,000 and over": 0.0046
+  },
+  "bridge": {
+   "No figure (small place)": 0.8713,
+   "Under 5,000": 0.0717,
+   "5,000 to 20,000": 0.0312,
+   "20,000 to 100,000": 0.0221,
+   "100,000 and over": 0.0037
+  },
+  "other": {
+   "No figure (small place)": 0.8944,
+   "Under 5,000": 0.0707,
+   "5,000 to 20,000": 0.0227,
+   "20,000 to 100,000": 0.0099,
+   "100,000 and over": 0.0023
+  }
+ },
+ "regions": [
+  {
+   "region": "London",
+   "ford": {
+    "n": 26,
+    "median": 72890.0
+   },
+   "bridge": {
+    "n": 8,
+    "median": 76384.0
+   },
+   "other": {
+    "n": 674,
+    "median": 75706.0
+   },
+   "bridge_vs_ford": 0.0479
+  },
+  {
+   "region": "South East",
+   "ford": {
+    "n": 168,
+    "median": 66178.0
+   },
+   "bridge": {
+    "n": 70,
+    "median": 64587.0
+   },
+   "other": {
+    "n": 5215,
+    "median": 64409.0
+   },
+   "bridge_vs_ford": -0.024
+  },
+  {
+   "region": "East of England",
+   "ford": {
+    "n": 141,
+    "median": 60517.0
+   },
+   "bridge": {
+    "n": 44,
+    "median": 55290.0
+   },
+   "other": {
+    "n": 4089,
+    "median": 58840.0
+   },
+   "bridge_vs_ford": -0.0864
+  },
+  {
+   "region": "South West",
+   "ford": {
+    "n": 330,
+    "median": 54016.0
+   },
+   "bridge": {
+    "n": 96,
+    "median": 51360.0
+   },
+   "other": {
+    "n": 6307,
+    "median": 52518.0
+   },
+   "bridge_vs_ford": -0.0492
+  },
+  {
+   "region": "West Midlands",
+   "ford": {
+    "n": 165,
+    "median": 51596.0
+   },
+   "bridge": {
+    "n": 58,
+    "median": 51444.0
+   },
+   "other": {
+    "n": 4208,
+    "median": 51285.0
+   },
+   "bridge_vs_ford": -0.0029
+  },
+  {
+   "region": "East Midlands",
+   "ford": {
+    "n": 67,
+    "median": 55113.0
+   },
+   "bridge": {
+    "n": 25,
+    "median": 46261.0
+   },
+   "other": {
+    "n": 2982,
+    "median": 51414.0
+   },
+   "bridge_vs_ford": -0.1606
+  },
+  {
+   "region": "Yorkshire and The Humber",
+   "ford": {
+    "n": 45,
+    "median": 53351.0
+   },
+   "bridge": {
+    "n": 50,
+    "median": 50190.0
+   },
+   "other": {
+    "n": 3387,
+    "median": 48582.0
+   },
+   "bridge_vs_ford": -0.0592
+  },
+  {
+   "region": "North West",
+   "ford": {
+    "n": 60,
+    "median": 49507.0
+   },
+   "bridge": {
+    "n": 66,
+    "median": 44015.0
+   },
+   "other": {
+    "n": 3665,
+    "median": 45594.0
+   },
+   "bridge_vs_ford": -0.1109
+  },
+  {
+   "region": "North East",
+   "ford": {
+    "n": 29,
+    "median": 41651.0
+   },
+   "bridge": {
+    "n": 18,
+    "median": 48051.0
+   },
+   "other": {
+    "n": 1417,
+    "median": 43885.0
+   },
+   "bridge_vs_ford": 0.1537
+  },
+  {
+   "region": "Wales",
+   "ford": {
+    "n": 53,
+    "median": 43737.0
+   },
+   "bridge": {
+    "n": 109,
+    "median": 43481.0
+   },
+   "other": {
+    "n": 3619,
+    "median": 43715.0
+   },
+   "bridge_vs_ford": -0.0059
+  }
+ ],
+ "regions_bridge_ahead": 2,
+ "regions_ford_ahead": 8,
+ "share_south_east": {
+  "ford": 0.309,
+  "bridge": 0.2243,
+  "other": 0.2806
+ },
+ "region_share": {
+  "ford": {
+   "London": 0.024,
+   "South East": 0.155,
+   "East of England": 0.1301,
+   "South West": 0.3044,
+   "West Midlands": 0.1522,
+   "East Midlands": 0.0618,
+   "Yorkshire and The Humber": 0.0415,
+   "North West": 0.0554,
+   "North East": 0.0268,
+   "Wales": 0.0489
+  },
+  "bridge": {
+   "London": 0.0147,
+   "South East": 0.1287,
+   "East of England": 0.0809,
+   "South West": 0.1765,
+   "West Midlands": 0.1066,
+   "East Midlands": 0.046,
+   "Yorkshire and The Humber": 0.0919,
+   "North West": 0.1213,
+   "North East": 0.0331,
+   "Wales": 0.2004
+  },
+  "other": {
+   "London": 0.019,
+   "South East": 0.1466,
+   "East of England": 0.115,
+   "South West": 0.1773,
+   "West Midlands": 0.1183,
+   "East Midlands": 0.0839,
+   "Yorkshire and The Humber": 0.0952,
+   "North West": 0.1031,
+   "North East": 0.0398,
+   "Wales": 0.1018
+  }
+ },
+ "premium": {
+  "raw": {
+   "bridge": -0.085,
+   "lo": -0.1033,
+   "hi": -0.0662,
+   "p": 0.0,
+   "other": -0.0486,
+   "n": 37191,
+   "r2": 0.002
+  },
+  "size": {
+   "bridge": -0.0845,
+   "lo": -0.1028,
+   "hi": -0.0658,
+   "p": 0.0,
+   "other": -0.0483,
+   "n": 37191,
+   "r2": 0.005
+  },
+  "region": {
+   "bridge": -0.0367,
+   "lo": -0.0519,
+   "hi": -0.0213,
+   "p": 0.0,
+   "other": -0.0232,
+   "n": 37191,
+   "r2": 0.388
+  },
+  "both": {
+   "bridge": -0.0364,
+   "lo": -0.0516,
+   "hi": -0.021,
+   "p": 0.0,
+   "other": -0.0234,
+   "n": 37191,
+   "r2": 0.39
+  },
+  "both_plus_type": {
+   "bridge": -0.029,
+   "lo": -0.0442,
+   "hi": -0.0136,
+   "p": 0.0002,
+   "other": -0.0192,
+   "n": 37191,
+   "r2": 0.406
+  },
+  "both_roman": {
+   "bridge": -0.0337,
+   "lo": -0.0486,
+   "hi": -0.0186,
+   "p": 0.0,
+   "other": -0.0216,
+   "n": 37191,
+   "r2": 0.412
+  }
+ },
+ "premium_bua": {
+  "raw": {
+   "bridge": -0.0863,
+   "lo": -0.1313,
+   "hi": -0.039,
+   "p": 0.0005,
+   "other": -0.0692,
+   "n": 3938,
+   "r2": 0.005
+  },
+  "both": {
+   "bridge": -0.0223,
+   "lo": -0.0609,
+   "hi": 0.018,
+   "p": 0.2738,
+   "other": -0.0438,
+   "n": 3938,
+   "r2": 0.392
+  }
+ },
+ "median_ratio_boot": {
+  "est": -0.0998,
+  "lo": -0.1277,
+  "hi": -0.0747
+ },
+ "robust": {
+  "no_uncertain": {
+   "bridge": -0.0363,
+   "lo": -0.0515,
+   "hi": -0.0209,
+   "p": 0.0,
+   "other": -0.0234,
+   "n": 37186,
+   "r2": 0.39
+  },
+  "no_standalone": {
+   "bridge": -0.0274,
+   "lo": -0.0445,
+   "hi": -0.0099,
+   "p": 0.0022,
+   "other": -0.0245,
+   "n": 36983,
+   "r2": 0.39
+  },
+  "england": {
+   "bridge": -0.0401,
+   "lo": -0.0572,
+   "hi": -0.0227,
+   "p": 0.0,
+   "other": -0.024,
+   "n": 33425,
+   "r2": 0.352
+  },
+  "net_ahc_bua": {
+   "bridge": 0.0178,
+   "lo": -0.0221,
+   "hi": 0.0594,
+   "p": 0.387,
+   "other": -0.0165,
+   "n": 1676,
+   "r2": 0.451
+  }
+ },
+ "size_models": {
+  "bua": {
+   "bridge": 0.0968,
+   "lo": -0.2254,
+   "hi": 0.5532,
+   "p": 0.6025,
+   "n": 3944
+  }
+ },
+ "has_bua_share": {
+  "ford": 0.1328,
+  "bridge": 0.1287,
+  "other": 0.1056
+ },
+ "domesday": {
+  "ford": {
+   "n": 1034,
+   "in_domesday": 438,
+   "share": 0.4236,
+   "hh_median": 22.0,
+   "burgess_places": 14,
+   "burgess_share_of_dd": 0.032,
+   "share_tv": 0.572,
+   "n_tv": 500
+  },
+  "bridge": {
+   "n": 434,
+   "in_domesday": 59,
+   "share": 0.1359,
+   "hh_median": 13.0,
+   "burgess_places": 1,
+   "burgess_share_of_dd": 0.0169,
+   "share_tv": 0.2115,
+   "n_tv": 156
+  },
+  "other": {
+   "n": 31958,
+   "in_domesday": 10331,
+   "share": 0.3233,
+   "hh_median": 20.0,
+   "burgess_places": 164,
+   "burgess_share_of_dd": 0.0159,
+   "share_tv": 0.5137,
+   "n_tv": 12707
+  }
+ },
+ "domesday_bua": {
+  "ford": {
+   "n": 142,
+   "dd_share": 0.6761,
+   "pop_median_dd": 3623.0,
+   "pop_median_notdd": 3019.0
+  },
+  "bridge": {
+   "n": 52,
+   "dd_share": 0.2692,
+   "pop_median_dd": 7874.0,
+   "pop_median_notdd": 4141.0
+  },
+  "other": {
+   "n": 3392,
+   "dd_share": 0.5823,
+   "pop_median_dd": 2966.0,
+   "pop_median_notdd": 2644.0
+  }
+ },
+ "domesday_bridge_towns": [
+  "Cambridge",
+  "Bridgwater",
+  "Trowbridge",
+  "Tonbridge",
+  "Weybridge",
+  "Ivybridge",
+  "Woodbridge",
+  "Kingsbridge",
+  "Fordingbridge",
+  "Axbridge",
+  "Stanbridge",
+  "Stalbridge",
+  "Slimbridge",
+  "Heybridge Basin"
+ ],
+ "domesday_size_model": {
+  "n": 1761,
+  "lhh": 0.174,
+  "bridge": 1.1898,
+  "bridge_p": 0.0964,
+  "r2": 0.039
+ },
+ "domesday_boroughs_named": {
+  "ford": [
+   "Bradford on Avon",
+   "Codford St Peter",
+   "Ford",
+   "Fordwich",
+   "Hereford",
+   "Hertford",
+   "Iford",
+   "Kempsford",
+   "Lydford",
+   "Playford",
+   "Stafford",
+   "Stratford Tony",
+   "Thetford",
+   "Welford-on-Avon"
+  ],
+  "bridge": [
+   "Cambridge"
+  ]
+ },
+ "bridges_total": 13115,
+ "bridges_wikidata": 11038,
+ "bridges_wikidata_dated": 1403,
+ "bridges_medieval": 26,
+ "bridges_pre1700": 55,
+ "bridges_medieval_list": [
+  {
+   "name": "Chesters Bridge",
+   "year": 122
+  },
+  {
+   "name": "Elvet Bridge",
+   "year": 1160
+  },
+  {
+   "name": "Clattern Bridge",
+   "year": 1175
+  },
+  {
+   "name": "Boat O' Brig, Old Bridge",
+   "year": 1200
+  },
+  {
+   "name": "Red Bridge",
+   "year": 1234
+  },
+  {
+   "name": "Hacton Bridge",
+   "year": 1299
+  },
+  {
+   "name": "Monnow Bridge",
+   "year": 1300
+  },
+  {
+   "name": "Brig o' Balgownie",
+   "year": 1320
+  },
+  {
+   "name": "Upminster Bridge",
+   "year": 1375
+  },
+  {
+   "name": "Hanging Bridge",
+   "year": 1400
+  },
+  {
+   "name": "Old Dee Bridge",
+   "year": 1400
+  },
+  {
+   "name": "Turtle Bridge",
+   "year": 1400
+  },
+  {
+   "name": "Stanhope Bridge",
+   "year": 1400
+  },
+  {
+   "name": "Sunderland Bridge",
+   "year": 1400
+  },
+  {
+   "name": "Culham Bridge",
+   "year": 1416
+  },
+  {
+   "name": "Abingdon Bridge",
+   "year": 1416
+  },
+  {
+   "name": "Stopham Bridge",
+   "year": 1423
+  },
+  {
+   "name": "Dumfries Old Bridge",
+   "year": 1430
+  },
+  {
+   "name": "Lesbury Bridge",
+   "year": 1450
+  },
+  {
+   "name": "Eggleston Bridge",
+   "year": 1450
+  },
+  {
+   "name": "Wye Bridge, Hereford",
+   "year": 1450
+  },
+  {
+   "name": "Pleshey Castle Bridge",
+   "year": 1450
+  },
+  {
+   "name": "Rotherham Bridge",
+   "year": 1483
+  },
+  {
+   "name": "Croft Bridge",
+   "year": 1500
+  },
+  {
+   "name": "Framwellgate Bridge",
+   "year": 1500
+  },
+  {
+   "name": "New Bridge",
+   "year": 1520
+  }
+ ],
+ "medieval_bridges": {
+  "ford": {
+   "n": 1129,
+   "with_medieval_1km": 2,
+   "with_pre1700_1km": 6,
+   "share_medieval_1km": 0.00177,
+   "with_any_bridge_record_1km": 0.2817
+  },
+  "bridge": {
+   "n": 643,
+   "with_medieval_1km": 4,
+   "with_pre1700_1km": 6,
+   "share_medieval_1km": 0.00622,
+   "with_any_bridge_record_1km": 0.4728
+  },
+  "other": {
+   "n": 41502,
+   "with_medieval_1km": 55,
+   "with_pre1700_1km": 89,
+   "share_medieval_1km": 0.00133,
+   "with_any_bridge_record_1km": 0.194
+  }
+ },
+ "medieval_bridge_towns": {
+  "with_n": 9,
+  "with_pop_median": 33176.0,
+  "with_inc_median": 49717.0,
+  "without_pop_median": 2793.0,
+  "without_inc_median": 53205.0,
+  "with_names": [
+   "Chester",
+   "Rotherham",
+   "Hereford",
+   "Durham",
+   "Abingdon-on-Thames",
+   "Monmouth",
+   "Stanhope",
+   "Hipsburn",
+   "Mayfield"
+  ],
+  "pre1700_n": 19,
+  "pre1700_pop_median": 3256.0
+ },
+ "roman_rivers": {
+  "ford": {
+   "median_km": 4.21,
+   "within_1km": 0.1854,
+   "river_median_km": 0.364,
+   "river_within_250m": 0.3699
+  },
+  "bridge": {
+   "median_km": 4.96,
+   "within_1km": 0.2077,
+   "river_median_km": 0.167,
+   "river_within_250m": 0.6268
+  },
+  "other": {
+   "median_km": 4.2,
+   "within_1km": 0.1654,
+   "river_median_km": 0.705,
+   "river_within_250m": 0.2176
+  }
+ },
+ "street_fords": {
+  "n": 19,
+  "within_1km_roman": 19,
+  "names": [
+   "Fenny Stratford",
+   "Old Stratford",
+   "Stony Stratford",
+   "Stratford",
+   "Stratford Fields",
+   "Stratford Marsh",
+   "Stratford New Town",
+   "Stratford St Andrew",
+   "Stratford St Mary",
+   "Stratford Tony",
+   "Stratford sub Castle",
+   "Stratford-upon-Avon",
+   "Stratfordbridge",
+   "Stretford",
+   "Water Stratford"
+  ]
+ },
+ "scotland": {
+  "ford": {
+   "n": 45,
+   "with_wd_pop": 17,
+   "wd_pop_sum": 26494,
+   "biggest": [
+    "Hurlford",
+    "Wallyford",
+    "Bainsford",
+    "Alford"
+   ]
+  },
+  "bridge": {
+   "n": 99,
+   "with_wd_pop": 22,
+   "wd_pop_sum": 105626,
+   "biggest": [
+    "Coatbridge",
+    "Bridge of Don",
+    "Gorebridge",
+    "Stockbridge"
+   ],
+   "top1_pop": 43960,
+   "top1_share": 0.4162
+  }
+ },
+ "wikidata_check": {
+  "n": 3359,
+  "spearman": 0.896
+ },
+ "ex": {
+  "Bradford": {
+   "name": "Bradford",
+   "pop": 331757,
+   "inc": 42540.0,
+   "region": "Yorkshire and The Humber"
+  },
+  "Oxford": {
+   "name": "Oxford",
+   "pop": 166279,
+   "inc": 64869.0,
+   "region": "South East"
+  },
+  "Cambridge": {
+   "name": "Cambridge",
+   "pop": 149510,
+   "inc": 70865.0,
+   "region": "East of England"
+  },
+  "Weybridge": {
+   "name": "Weybridge",
+   "pop": 16298,
+   "inc": 78080.0,
+   "region": "South East"
+  },
+  "Stourbridge": {
+   "name": "Stourbridge",
+   "pop": 58064,
+   "inc": 51346.0,
+   "region": "West Midlands"
+  },
+  "Guildford": {
+   "name": "Guildford",
+   "pop": 76392,
+   "inc": 69818.0,
+   "region": "South East"
+  },
+  "Salford": {
+   "name": "Salford",
+   "pop": 108494,
+   "inc": 44290.0,
+   "region": "North West"
+  },
+  "Tonbridge": {
+   "name": "Tonbridge",
+   "pop": 37210,
+   "inc": 64815.0,
+   "region": "South East"
+  },
+  "Pontypridd": {
+   "name": "Pontypridd",
+   "pop": 31903,
+   "inc": 43097.0,
+   "region": "Wales"
+  },
+  "Castleford": {
+   "name": "Castleford",
+   "pop": 44293,
+   "inc": 42220.0,
+   "region": "Yorkshire and The Humber"
+  },
+  "Stalybridge": {
+   "name": "Stalybridge",
+   "pop": 27419,
+   "inc": 45113.0,
+   "region": "North West"
+  },
+  "Watford": {
+   "name": "Watford",
+   "pop": 130965,
+   "inc": 61740.0,
+   "region": "East of England"
+  }
+ },
+ "bradford_beats_top_k_bridges": 4,
+ "bradford_vs_top_k_sum": 309791,
+ "exceptions_n": 13
+}
